@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/dvir_item_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_assignment_black_24dp" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/dvir_item_name"-->
+<!--        style="@style/AppTheme.Subheader"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignTop="@+id/dvir_item_image"-->
+<!--        android:layout_marginLeft="8dp"-->
+<!--        android:layout_marginTop="-2dp"-->
+<!--        android:layout_toRightOf="@+id/dvir_item_image"-->
+<!--        android:ellipsize="end"-->
+<!--        android:maxLines="1"-->
+<!--        tools:text="DVIR #8219" />-->
+
+    <TextView
+        android:id="@+id/dvir_item_date"
+        style="@style/AppTheme.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/dvir_item_image"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/greyDisabled"
+        tools:text="8/23/2019" />
+
+    <TextView
+        android:id="@+id/dvir_item_mobile"
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_below="@+id/dvir_item_date"
+        android:layout_toRightOf="@+id/dvir_item_image"
+        android:textColor="@color/greySecondary"
+        tools:text="Ford Econoline Van" />
+
+    <ImageView
+        android:id="@+id/item_arrow"
+        style="@style/AppTheme.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+</RelativeLayout>
