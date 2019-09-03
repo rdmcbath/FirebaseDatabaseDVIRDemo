@@ -1,7 +1,9 @@
 package com.mcbath.rebecca.firebasedatabasedvirtest1;
 
+import androidx.annotation.NonNull;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,13 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,21 +24,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.mcbath.rebecca.firebasedatabasedvirtest1.adapters.DvirAdapter;
 import com.mcbath.rebecca.firebasedatabasedvirtest1.models.Dvir;
 import com.mcbath.rebecca.firebasedatabasedvirtest1.viewmodel.MainActivityViewModel;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import androidx.annotation.NonNull;
+
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,14 +49,13 @@ public class MainActivity extends AppCompatActivity implements DvirAdapter.OnDvi
 	private static final int RC_SIGN_IN = 9001;
 
 	private final String COLLECTION_KEY = "dvirs";
-	private static final int LIMIT = 50;
+	private static final int LIMIT = 100;
 	private MainActivityViewModel mViewModel;
 	private Toolbar mToolbar;
 	private RecyclerView mDvirRecyclerView;
 	private ViewGroup mEmptyView;
 	private DvirAdapter mDvirAdapter;
 	private FirebaseFirestore mFirestore;
-	private List<Dvir> dvirList;
 	private ProgressBar mProgressBar;
 	private FloatingActionButton mFab;
 	private Query mQuery;
@@ -135,6 +131,39 @@ public class MainActivity extends AppCompatActivity implements DvirAdapter.OnDvi
 
 		mDvirRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		mDvirRecyclerView.setAdapter(mDvirAdapter);
+
+		new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+			@Override
+			public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+				return false;
+			}
+
+			// Called when a user swipes left or right on a ViewHolder
+			@Override
+			public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+				// Here is where you'll implement swipe to delete
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				builder.setMessage("Delete this inspection?");
+				builder.setCancelable(true);
+				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						// Get the position of the item to be deleted
+						int position = viewHolder.getAdapterPosition();
+						mDvirAdapter.deleteItem(position);
+					}
+				});
+
+				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						// User cancelled the dialog, so let's refresh the adapter to prevent hiding the item from UI
+						mDvirAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+						dialog.cancel();
+					}
+				})
+						.create()
+						.show();
+			}
+		}).attachToRecyclerView(mDvirRecyclerView);
 	}
 
 	@Override
@@ -238,21 +267,11 @@ public class MainActivity extends AppCompatActivity implements DvirAdapter.OnDvi
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
 	public void onDvirSelected(DocumentSnapshot dvir) {
-
 		Intent intent = new Intent(this, DvirDetailActivity.class);
 		intent.putExtra(DvirDetailActivity.KEY_DVIR_ID, dvir.getId());
 		startActivity(intent);
 		overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
 	}
 }
+

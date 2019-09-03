@@ -3,6 +3,8 @@ package com.mcbath.rebecca.firebasedatabasedvirtest1.models;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.sql.Time;
+import java.util.Date;
 import java.util.Map;
 
 /**

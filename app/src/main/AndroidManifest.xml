@@ -22,7 +22,8 @@
 
         <activity
             android:name=".DvirDetailActivity" />
-        <activity android:name=".AddDvirActivity" />
+        <activity android:name=".AddDvirActivity"
+            android:parentActivityName=".MainActivity"/>
 
     </application>
 </manifest>

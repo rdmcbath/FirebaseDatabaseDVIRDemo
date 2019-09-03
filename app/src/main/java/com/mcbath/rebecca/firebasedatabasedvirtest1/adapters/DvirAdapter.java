@@ -1,5 +1,6 @@
 package com.mcbath.rebecca.firebasedatabasedvirtest1.adapters;
 
+import android.content.ClipData;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,13 @@ import com.google.firebase.firestore.Query;
 import com.mcbath.rebecca.firebasedatabasedvirtest1.R;
 import com.mcbath.rebecca.firebasedatabasedvirtest1.models.Dvir;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.google.firebase.firestore.DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
 
 /**
  * Created by Rebecca McBath
@@ -67,9 +71,12 @@ public class DvirAdapter extends FirestoreAdapter<DvirAdapter.ViewHolder> {
 			dvirItemImageView.setImageResource(R.drawable.ic_assignment_black_24dp);
 			dvirItemArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
 
-				java.util.Date dateFromServer = dvir.getCreatedDate().toDate();
+			Date dateFromServer = null;
+			if (dvir.getCreatedDate() != null) {
+				dateFromServer = dvir.getCreatedDate().toDate();
 				String formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault()).format(dateFromServer);
 				dateTextView.setText(formatter);
+			}
 				mobileTextView.setText(dvir.getMobileName());
 
 				// Click listener
@@ -82,5 +89,9 @@ public class DvirAdapter extends FirestoreAdapter<DvirAdapter.ViewHolder> {
 					}
 				});
 			}
+		}
+
+		public void deleteItem(int position) {
+			getSnapshot(position).getReference().delete();
 		}
 	}
