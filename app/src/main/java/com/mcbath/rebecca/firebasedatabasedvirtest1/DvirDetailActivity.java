@@ -34,7 +34,7 @@ public class DvirDetailActivity extends AppCompatActivity implements View.OnClic
 	private TextView mobileNameTextview, createdByTextview, createdDateTextview;
 	private TextView brakesCommentsText, connectionsCommentsText, couplingsCommentsText, engineCommentsText, exteriorCommentsText, interiorCommentsText, lightsCommentsText;
 	private TextView lockingpinsCommentsText, tiedownsCommentsText, wheelsCommentsText, windshieldCommentsText;
-	private ImageView photoImage, topCardBackground, closePage, brakesPassImage, brakesFailImage, connectionsPassImage, connectionsFailImage;
+	private ImageView topCardBackground, closePage, brakesPassImage, brakesFailImage, connectionsPassImage, connectionsFailImage;
 	private ImageView brakesImageView, connectionsImageView, couplingsImageView, engineImageView, exteriorImageView, interiorImageView, lockingpinsImageView, tiedownsImageView, wheelsImageView, lightsImageView, windshieldImageView;
 	private ImageView couplingsPassImage, couplingsFailImage, enginePassImage, engineFailImage, exteriorPassImage, exteriorFailImage;
 	private ImageView interiorPassImage, interiorFailImage, lightsPassImage, lightsFailImage, lockingpinsPassImage, lockingpinsFailImage;
@@ -155,70 +155,92 @@ public class DvirDetailActivity extends AppCompatActivity implements View.OnClic
 						Dvir dvir = doc.toObject(Dvir.class);
 
 						if (dvir != null) {
-							brakesPass = dvir.getInspection().getBrakes().getPass();
-							if (!brakesPass) {
-								brakesComments = dvir.getInspection().getBrakes().getComments();
-								brakesPhoto = dvir.getInspection().getBrakes().getPhotoUrl();
+							if (dvir.getInspection().getBrakes() != null) {
+								brakesPass = dvir.getInspection().getBrakes().getPass();
+								if (!brakesPass) {
+									brakesComments = dvir.getInspection().getBrakes().getComments();
+									brakesPhoto = dvir.getInspection().getBrakes().getPhotoUrl();
+								}
 							}
 
-							connectionsPass = dvir.getInspection().getConnections().getPass();
-							if (!connectionsPass) {
-								connectionsComments = dvir.getInspection().getConnections().getComments();
-								connectionsPhoto = dvir.getInspection().getConnections().getPhotoUrl();
+							if (dvir.getInspection().getConnections() != null) {
+								connectionsPass = dvir.getInspection().getConnections().getPass();
+								if (!connectionsPass) {
+									connectionsComments = dvir.getInspection().getConnections().getComments();
+									connectionsPhoto = dvir.getInspection().getConnections().getPhotoUrl();
+								}
 							}
 
-							couplingsPass = dvir.getInspection().getCouplings().getPass();
-							if (!couplingsPass) {
-								couplingsComments = dvir.getInspection().getCouplings().getComments();
-								couplingsPhoto = dvir.getInspection().getCouplings().getPhotoUrl();
+							if (dvir.getInspection().getCouplings() != null) {
+								couplingsPass = dvir.getInspection().getCouplings().getPass();
+								if (!couplingsPass) {
+									couplingsComments = dvir.getInspection().getCouplings().getComments();
+									couplingsPhoto = dvir.getInspection().getCouplings().getPhotoUrl();
+								}
 							}
 
-							enginePass = dvir.getInspection().getEngine().getPass();
-							if (!enginePass) {
-								engineComments = dvir.getInspection().getEngine().getComments();
-								enginePhoto = dvir.getInspection().getEngine().getPhotoUrl();
+							if (dvir.getInspection().getEngine() != null) {
+								enginePass = dvir.getInspection().getEngine().getPass();
+								if (!enginePass) {
+									engineComments = dvir.getInspection().getEngine().getComments();
+									enginePhoto = dvir.getInspection().getEngine().getPhotoUrl();
+								}
 							}
 
-							exteriorPass = dvir.getInspection().getExterior().getPass();
-							if (!exteriorPass) {
-								exteriorComments = dvir.getInspection().getExterior().getComments();
-								exteriorPhoto = dvir.getInspection().getExterior().getPhotoUrl();
+							if (dvir.getInspection().getExterior() != null) {
+								exteriorPass = dvir.getInspection().getExterior().getPass();
+								if (!exteriorPass) {
+									exteriorComments = dvir.getInspection().getExterior().getComments();
+									exteriorPhoto = dvir.getInspection().getExterior().getPhotoUrl();
+								}
 							}
 
-							interiorPass = dvir.getInspection().getInterior().getPass();
-							if (!interiorPass) {
-								interiorComments = dvir.getInspection().getInterior().getComments();
-								interiorPhoto = dvir.getInspection().getInterior().getPhotoUrl();
+							if (dvir.getInspection().getInterior() != null) {
+								interiorPass = dvir.getInspection().getInterior().getPass();
+								if (!interiorPass) {
+									interiorComments = dvir.getInspection().getInterior().getComments();
+									interiorPhoto = dvir.getInspection().getInterior().getPhotoUrl();
+								}
 							}
 
-							lightsPass = dvir.getInspection().getLights().getPass();
-							if (!lightsPass) {
-								lightsComments = dvir.getInspection().getLights().getComments();
-								lightsPhoto = dvir.getInspection().getLights().getPhotoUrl();
+							if (dvir.getInspection().getLights() != null) {
+								lightsPass = dvir.getInspection().getLights().getPass();
+								if (!lightsPass) {
+									lightsComments = dvir.getInspection().getLights().getComments();
+									lightsPhoto = dvir.getInspection().getLights().getPhotoUrl();
+								}
 							}
 
-							lockingpinsPass = dvir.getInspection().getLockingPins().getPass();
-							if (!lockingpinsPass) {
-								lockingpinsComments = dvir.getInspection().getLockingPins().getComments();
-								lockingpinsPhoto = dvir.getInspection().getLockingPins().getPhotoUrl();
+							if (dvir.getInspection().getLockingPins() != null) {
+								lockingpinsPass = dvir.getInspection().getLockingPins().getPass();
+								if (!lockingpinsPass) {
+									lockingpinsComments = dvir.getInspection().getLockingPins().getComments();
+									lockingpinsPhoto = dvir.getInspection().getLockingPins().getPhotoUrl();
+								}
 							}
 
-							tiedownsPass = dvir.getInspection().getTieDowns().getPass();
-							if (!tiedownsPass) {
-								tiedownsComments = dvir.getInspection().getTieDowns().getComments();
-								tiedownsPhoto = dvir.getInspection().getTieDowns().getPhotoUrl();
+							if (dvir.getInspection().getTieDowns() != null) {
+								tiedownsPass = dvir.getInspection().getTieDowns().getPass();
+								if (!tiedownsPass) {
+									tiedownsComments = dvir.getInspection().getTieDowns().getComments();
+									tiedownsPhoto = dvir.getInspection().getTieDowns().getPhotoUrl();
+								}
 							}
 
-							wheelsPass = dvir.getInspection().getWheels().getPass();
-							if (!wheelsPass) {
-								wheelsComments = dvir.getInspection().getWheels().getComments();
-								wheelsPhoto = dvir.getInspection().getWheels().getPhotoUrl();
+							if (dvir.getInspection().getWheels() != null) {
+								wheelsPass = dvir.getInspection().getWheels().getPass();
+								if (!wheelsPass) {
+									wheelsComments = dvir.getInspection().getWheels().getComments();
+									wheelsPhoto = dvir.getInspection().getWheels().getPhotoUrl();
+								}
 							}
 
-							windshieldPass = dvir.getInspection().getWindshield().getPass();
-							if (!windshieldPass) {
-								windshieldComments = dvir.getInspection().getWindshield().getComments();
-								windshieldPhoto = dvir.getInspection().getWindshield().getPhotoUrl();
+							if (dvir.getInspection().getWindshield() != null) {
+								windshieldPass = dvir.getInspection().getWindshield().getPass();
+								if (!windshieldPass) {
+									windshieldComments = dvir.getInspection().getWindshield().getComments();
+									windshieldPhoto = dvir.getInspection().getWindshield().getPhotoUrl();
+								}
 							}
 
 							displayDvir();
@@ -242,18 +264,8 @@ public class DvirDetailActivity extends AppCompatActivity implements View.OnClic
 		mobileNameTextview.setText(mobileName);
 		createdByTextview.setText(createdBy);
 		java.util.Date dateFromServer = createdDate.toDate();
-		String formatter = new SimpleDateFormat("M-dd-yyyy, h:mm a", Locale.getDefault()).format(dateFromServer);
+		String formatter = new SimpleDateFormat("M-d-yyyy, h:mm a", Locale.getDefault()).format(dateFromServer);
 		createdDateTextview.setText(formatter);
-
-
-		// get a reference to the detail layout
-//		LinearLayout dvirDetailLayout = findViewById(R.id.dvirDetailLayout);
-		// inflate included layout
-//		View dvirFailLayout = LayoutInflater.from(this).inflate(R.layout.dvir_fail_layout,null);
-
-//		dvirFailLayout = dvirDetailFailLayout.findViewById(R.id.dvir_fail_layout);
-//		photoImage = dvirDetailFailLayout.findViewById(R.id.photo);
-//		commentsText = dvirDetailFailLayout.findViewById(R.id.comments_text);
 
 		// Brakes
 		if (brakesPass) {

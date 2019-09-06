@@ -1,27 +1,60 @@
 package com.mcbath.rebecca.firebasedatabasedvirtest1;
 
+import android.annotation.TargetApi;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Rebecca McBath
  * on 2019-08-30.
  */
 public class Utils {
+	private static final String TAG = "Utils";
+
+	private static final String IMAGE_DATE_STAMP_FORMAT = "yyyyMMdd_HHmmss";
+	private static final String STORAGE_ALBUM_NAME = "Dvirs";
+
+	// --------------------
+	// ANIMATIONS
+	// --------------------
 
 	/**
 	 * Slide down animation
+	 *
 	 * @param ctx
 	 * @param v
 	 */
-	public static void slide_down(Context ctx, View v){
+	public static void slide_down(Context ctx, View v) {
 
 		Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down);
-		if(a != null){
+		if (a != null) {
 			a.reset();
-			if(v != null){
+			if (v != null) {
 				v.clearAnimation();
 				v.startAnimation(a);
 			}
@@ -30,18 +63,103 @@ public class Utils {
 
 	/**
 	 * Slide up animation
+	 *
 	 * @param ctx
 	 * @param v
 	 */
-	public static void slide_up(Context ctx, View v){
+	public static void slide_up(Context ctx, View v) {
 
 		Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_up);
-		if(a != null){
+		if (a != null) {
 			a.reset();
-			if(v != null){
+			if (v != null) {
 				v.clearAnimation();
 				v.startAnimation(a);
 			}
 		}
 	}
+
+	// --------------------
+	// IMAGE UTILS
+	// --------------------
+
+
+	static File compressImage(File imageFile, int reqWidth, int reqHeight,
+	                          Bitmap.CompressFormat compressFormat, int quality, String destinationPath)
+			throws IOException {
+		FileOutputStream fileOutputStream = null;
+		File file = new File(destinationPath).getParentFile();
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+		try {
+			fileOutputStream = new FileOutputStream(destinationPath);
+			// write the compressed bitmap at the destination specified by destinationPath.
+			decodeSampledBitmapFromFile(imageFile, reqWidth, reqHeight).compress(compressFormat, quality,
+					fileOutputStream);
+		} finally {
+			if (fileOutputStream != null) {
+				fileOutputStream.flush();
+				fileOutputStream.close();
+			}
+		}
+
+		return new File(destinationPath);
+	}
+
+	static Bitmap decodeSampledBitmapFromFile(File imageFile, int reqWidth, int reqHeight)
+			throws IOException {
+		// First decode with inJustDecodeBounds=true to check dimensions
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+
+		// Calculate inSampleSize
+		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+
+		Bitmap scaledBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+
+		//check the rotation of the image and display it properly
+		ExifInterface exif;
+		exif = new ExifInterface(imageFile.getAbsolutePath());
+		int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+		Matrix matrix = new Matrix();
+		if (orientation == 6) {
+			matrix.postRotate(90);
+		} else if (orientation == 3) {
+			matrix.postRotate(180);
+		} else if (orientation == 8) {
+			matrix.postRotate(270);
+		}
+		scaledBitmap =
+				Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(),
+						matrix, true);
+		return scaledBitmap;
+	}
+
+	private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth,
+	                                         int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
+
+			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
+			// height and width larger than the requested height and width.
+			while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+				inSampleSize *= 2;
+			}
+		}
+
+		return inSampleSize;
+	}
 }
+

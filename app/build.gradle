@@ -16,11 +16,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -29,9 +33,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     // Android architecture components
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.1.0'
 
     // Firestore
     implementation 'com.google.firebase:firebase-firestore:21.0.0'
@@ -47,5 +51,15 @@ dependencies {
 
     // Displaying images
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+    // reactive
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava2Version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+    implementation('com.github.bumptech.glide:glide:4.7.1@aar') {
+        transitive = true
+    }
+
+    // For managing request permissions
+    implementation 'com.karumi:dexter:4.2.0'
 }
 apply plugin: 'com.google.gms.google-services'
